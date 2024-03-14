@@ -89,12 +89,12 @@ async def join_meet():
         "sudo rm -rf /var/run/pulse /var/lib/pulse /root/.config/pulse", shell=True
     )
     subprocess.check_output(
-        "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
+        "sudo -e pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
         shell=True,
     )
     try:
         subprocess.check_output(
-            'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
+            'sudo -e pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
             shell=True,
         )
     except subprocess.CalledProcessError as e:
@@ -102,17 +102,17 @@ async def join_meet():
    
     try:
         subprocess.check_output(
-            'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
+            'sudo -e pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
             shell=True,
         )
     except subprocess.CalledProcessError as e:
         print(e.output)
     subprocess.check_output(
-        "sudo pactl set-default-source MicOutput.monitor", shell=True
+        "sudo -e pactl set-default-source MicOutput.monitor", shell=True
     )
     subprocess.check_output("sudo pactl set-default-sink MicOutput", shell=True)
     subprocess.check_output(
-        "sudo pactl load-module module-virtual-source source_name=VirtualMic",
+        "sudo -e pactl load-module module-virtual-source source_name=VirtualMic",
         shell=True,
     )
 
