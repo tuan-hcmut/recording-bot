@@ -71,7 +71,7 @@ async def google_sign_in(email, password, driver):
 
 
 async def join_meet():
-    meet_link = os.getenv("GMEET_LINK", "https://meet.google.com/dau-pztc-yad")
+    meet_link = os.getenv("GMEET_LINK", "https://meet.google.com/rfz-xobo-izo")
     print(f"start recorder for {meet_link}")
 
     # delete the folder screenshots if it exists even if not empty
@@ -92,27 +92,21 @@ async def join_meet():
         "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
         shell=True,
     )
-    try:
-        subprocess.check_output(
-            'sudo -e pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
-            shell=True,
-        )
-    except subprocess.CalledProcessError as e:
-        print(e.output)
-   
-    try:
-        subprocess.check_output(
-            'sudo -e pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
-            shell=True,
-        )
-    except subprocess.CalledProcessError as e:
-        print(e.output)
     subprocess.check_output(
-        "sudo -e pactl set-default-source MicOutput.monitor", shell=True
+        'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
+        shell=True,
+    )
+
+    subprocess.check_output(
+        'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
+        shell=True,
+    )
+    subprocess.check_output(
+        "sudo pactl set-default-source MicOutput.monitor", shell=True
     )
     subprocess.check_output("sudo pactl set-default-sink MicOutput", shell=True)
     subprocess.check_output(
-        "sudo -e pactl load-module module-virtual-source source_name=VirtualMic",
+        "sudo pactl load-module module-virtual-source source_name=VirtualMic",
         shell=True,
     )
 
@@ -122,7 +116,7 @@ async def join_meet():
     options.add_argument("--window-size=1920x1080")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
-    # options.add_argument('--headless=new')
+    options.add_argument('--headless=new')
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-application-cache")
@@ -134,18 +128,18 @@ async def join_meet():
 
     driver.set_window_size(1920, 1080)
 
-    email = os.getenv("GMAIL_USER_EMAIL", "")
-    password = os.getenv("GMAIL_USER_PASSWORD", "")
-    gladia_api_key = (os.getenv("GLADIA_API_KEY", ""),)
+    email = os.getenv("GMAIL_USER_EMAIL", "tuan016772396@gmail.com")
+    password = os.getenv("GMAIL_USER_PASSWORD", "01677239677")
+    # gladia_api_key = (os.getenv("GLADIA_API_KEY", ""),)
 
     if email == "" or password == "":
         print("No email or password specified")
         return
 
-    if gladia_api_key == "":
-        print("No Gladia API key specified")
-        print("Create one for free at https://app.gladia.io/")
-        return
+    # if gladia_api_key == "":
+    #     print("No Gladia API key specified")
+    #     print("Create one for free at https://app.gladia.io/")
+    #     return
 
     print("Google Sign in")
     await google_sign_in(email, password, driver)
