@@ -89,7 +89,7 @@ async def join_meet():
         "sudo rm -rf /var/run/pulse /var/lib/pulse /root/.config/pulse", shell=True
     )
     subprocess.check_output(
-        "sudo -e pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
+        "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
         shell=True,
     )
     try:
