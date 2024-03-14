@@ -85,30 +85,30 @@ async def join_meet():
 
     print("starting virtual audio drivers")
     # find audio source for specified browser
-    subprocess.check_output(
-        "sudo rm -rf /var/run/pulse /var/lib/pulse /root/.config/pulse", shell=True
-    )
-    subprocess.check_output(
-        "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
-        shell=True,
-    )
-    subprocess.check_output(
-        'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
-        shell=True,
-    )
+    # subprocess.check_output(
+    #     "sudo rm -rf /var/run/pulse /var/lib/pulse /root/.config/pulse", shell=True
+    # )
+    # subprocess.check_output(
+    #     "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
+    #     shell=True,
+    # )
+    # subprocess.check_output(
+    #     'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
+    #     shell=True,
+    # )
 
-    subprocess.check_output(
-        'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
-        shell=True,
-    )
-    subprocess.check_output(
-        "sudo pactl set-default-source MicOutput.monitor", shell=True
-    )
-    subprocess.check_output("sudo pactl set-default-sink MicOutput", shell=True)
-    subprocess.check_output(
-        "sudo pactl load-module module-virtual-source source_name=VirtualMic",
-        shell=True,
-    )
+    # subprocess.check_output(
+    #     'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
+    #     shell=True,
+    # )
+    # subprocess.check_output(
+    #     "sudo pactl set-default-source MicOutput.monitor", shell=True
+    # )
+    # subprocess.check_output("sudo pactl set-default-sink MicOutput", shell=True)
+    # subprocess.check_output(
+    #     "sudo pactl load-module module-virtual-source source_name=VirtualMic",
+    #     shell=True,
+    # )
 
     options = uc.ChromeOptions()
 
