@@ -92,14 +92,21 @@ async def join_meet():
         "sudo pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit  >> /dev/null 2>&1",
         shell=True,
     )
-    subprocess.check_output(
-        'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
-        shell=True,
-    )
-    subprocess.check_output(
-        'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
-        shell=True,
-    )
+    try:
+        subprocess.check_output(
+            'sudo pactl load-module module-null-sink sink_name=DummyOutput sink_properties=device.description="Virtual_Dummy_Output"',
+            shell=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(e.output)
+   
+    try:
+        subprocess.check_output(
+            'sudo pactl load-module module-null-sink sink_name=MicOutput sink_properties=device.description="Virtual_Microphone_Output"',
+            shell=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(e.output)
     subprocess.check_output(
         "sudo pactl set-default-source MicOutput.monitor", shell=True
     )
