@@ -102,6 +102,6 @@ RUN rm /run/dbus/pid
 RUN mv pulseaudio.conf /etc/dbus-1/system.d/pulseaudio.conf
 
 # Define the command to run your application
-CMD ["/app/entrypoint.sh"]
+# CMD ["/app/entrypoint.sh"]
 
 
