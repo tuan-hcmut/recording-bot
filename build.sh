@@ -1,1 +1,1 @@
-docker build -t gmeet -f Dockerfile .
+docker build -t zoom -f Dockerfile .
