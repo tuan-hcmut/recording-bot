@@ -57,21 +57,18 @@ def zoom_bot():
             },
         )
 # Join Zoom Meeting
-# https://us05web.zoom.us/j/83802710186?pwd=oudnccEgHzMoz80icKVGdcb7epJVBo.1
+# https://us05web.zoom.us/j/82065192143?pwd=2TcHb8SF83x5jNZcEnpnHavw9RLPdw.1
 
-# Meeting ID:  838 0271 0186
-# Passcode: Z8NMAQ
-
-
+# Meeting ID:  820 6519 2143
+# Passcode: 6XnUSa
 
 
 
 
-
-    driver.get(f'https://zoom.us/wc/join/83802710186')
+    driver.get(f'https://zoom.us/wc/join/82065192143')
     driver.save_screenshot("screenshots/initial1.png")
     driver.implicitly_wait(10) #Wait untils tabs loaded
-    driver.find_element(By.ID, 'input-for-pwd').send_keys("Z8NMAQ")
+    driver.find_element(By.ID, 'input-for-pwd').send_keys("6XnUSa")
     driver.find_element(By.ID, 'input-for-name').send_keys("test1")
     driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
     driver.implicitly_wait(15)

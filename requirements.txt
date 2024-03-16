@@ -120,4 +120,4 @@ XlsxWriter==3.0.3
 redis==3.5.3
 emoji==2.9.0
 boto3==1.34.25
-undetected_chromedriver==3.5.3
+undetected_chromedriver==3.5.2
