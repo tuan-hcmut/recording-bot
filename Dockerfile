@@ -1,9 +1,13 @@
 # Use Python 3.10 as base image
 FROM python:3.10
 
+# Set working directory
+WORKDIR /usr/src/app
+
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
 
 # Update pip
 RUN pip install --no-cache-dir --upgrade pip
