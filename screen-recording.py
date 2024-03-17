@@ -36,6 +36,7 @@ async def run_command_async(command):
     return stdout, stderr
 
 async def join_meet():
+    time = datetime.utcnow()
     print("starting virtual audio drivers")
     # find audio source for specified browser
     subprocess.check_output(
@@ -93,7 +94,7 @@ async def join_meet():
     driver.execute_cdp_cmd(
             "Browser.grantPermissions",
             {
-                "origin": "https://www.naturalreaders.com/online/",
+                "origin": "https://zoom.us/wc/join/89624247909",
                 "permissions": [
                     "geolocation",
                     "audioCapture",
@@ -106,26 +107,35 @@ async def join_meet():
 
 
     duration = os.getenv("DURATION_IN_MINUTES", 1)
-    duration = int(duration) * 60
+    duration = 30
 
+# Join Zoom Meeting
+# https://us06web.zoom.us/j/89624247909?pwd=c2J5VzZ6dzZUbUg1emUwWGlCcE1JZz09
+
+# Meeting ID:  896 2424 7909
+# Passcode: 617108
     
-    driver.get(f'https://www.naturalreaders.com/online/')
-    sleep(3)
-    driver.find_element(By.XPATH, '/html/body/app-root/app-voice-selection/div/div[1]/div[2]/div/button[1]').click()
+    driver.get(f'https://zoom.us/wc/join/89624247909')
+    driver.implicitly_wait(5) #Wait untils tabs loaded
+    driver.save_screenshot("screenshots/main-page.png")
+    upload_to_s3('screenshots/main-page.png', 'qlay-recording', f"{time}.png")
+    driver.find_element(By.ID, 'input-for-pwd').send_keys("617108")
+    driver.find_element(By.ID, 'input-for-name').send_keys("Qlay-bot")
+    driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
+    driver.implicitly_wait(5)
+    driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
+    driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div[2]/div/button').click()
+    driver.save_screenshot("screenshots/c.png")
+    upload_to_s3('screenshots/joined.png', 'qlay-recording', f"{time}.png")
 
     print("Start recording")
-    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/output.mp4"
+    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-{time}.mp4"
     
     await asyncio.gather(
         run_command_async(record_command),
     )
-    sleep(3)
-    driver.save_screenshot("screenshots/initial1.png")
-    upload_to_s3('screenshots/initial1.png', 'qlay-recording', f"{datetime.utcnow()}.png")
-
-
     print("Done recording")
-    upload_to_s3('recordings/output.mp4', 'qlay-recording', f"{datetime.utcnow()}.mp4")
+    upload_to_s3(f'recordings/zoom-{time}.mp4', 'qlay-recording', f"{time}.mp4")
     driver.quit()
 
 

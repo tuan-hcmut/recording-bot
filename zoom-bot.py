@@ -67,15 +67,14 @@ def zoom_bot():
 
     driver.get(f'https://zoom.us/wc/join/82065192143')
     driver.save_screenshot("screenshots/initial1.png")
-    driver.implicitly_wait(10) #Wait untils tabs loaded
+    driver.implicitly_wait(5) #Wait untils tabs loaded
     driver.find_element(By.ID, 'input-for-pwd').send_keys("6XnUSa")
     driver.find_element(By.ID, 'input-for-name').send_keys("test1")
     driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
-    driver.implicitly_wait(15)
+    driver.implicitly_wait(5)
     driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
     driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div[2]/div/button').click()
     driver.save_screenshot("screenshots/initial2.png")
-    sleep(3242341)
 
     driver.quit()
 
