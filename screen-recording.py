@@ -18,7 +18,7 @@ def upload_to_s3(local_file_path, s3_bucket_name, object_name=None):
                        region_name="us-east-1")
     try:
 
-        s3.upload_file(local_file_path, s3_bucket_name, object_name, ExtraArgs={'ACL': 'public-read'})
+        s3.upload_file(local_file_path, s3_bucket_name, object_name)
         print(f"File uploaded to {object_name} in {s3_bucket_name}")
         return True
     except Exception as e:
