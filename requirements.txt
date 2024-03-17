@@ -121,3 +121,4 @@ redis==3.5.3
 emoji==2.9.0
 boto3==1.34.25
 undetected_chromedriver==3.5.2
+pyaudio==0.2.14
