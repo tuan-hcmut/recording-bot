@@ -16,6 +16,14 @@ from selenium.webdriver.common.by import By
 def upload_to_s3(local_file_path, s3_bucket_name, object_name=None):
     s3 = boto3.client('s3', aws_access_key_id="AKIA3Z4NVYHGH6MYOUPV", aws_secret_access_key="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",
                        region_name="us-east-1")
+    try:
+
+        s3.upload_file(local_file_path, s3_bucket_name, object_name, ExtraArgs={'ACL': 'public-read'})
+        print(f"File uploaded to {object_name} in {s3_bucket_name}")
+        return True
+    except Exception as e:
+        print(e)
+        return False
     
 async def run_command_async(command):
     process = await asyncio.create_subprocess_shell(
