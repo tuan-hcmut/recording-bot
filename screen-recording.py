@@ -105,6 +105,9 @@ async def join_meet():
         )
 
 
+    print("Start recording")
+    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/output.mp4"
+    
     driver.get(f'https://www.naturalreaders.com/online/')
     sleep(3)
     driver.find_element(By.XPATH, '/html/body/app-root/app-voice-selection/div/div[1]/div[2]/div/button[1]').click()
@@ -115,8 +118,6 @@ async def join_meet():
     duration = os.getenv("DURATION_IN_MINUTES", 1)
     duration = int(duration) * 60
 
-    print("Start recording")
-    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/output.mp4"
 
     await asyncio.gather(
         run_command_async(record_command),
