@@ -129,13 +129,13 @@ async def join_meet():
     upload_to_s3('screenshots/joined.png', 'qlay-recording', f"{time}.png")
 
     print("Start recording")
-    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-{time}.mp4"
+    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
     
     await asyncio.gather(
         run_command_async(record_command),
     )
     print("Done recording")
-    upload_to_s3(f'recordings/zoom-{time}.mp4', 'qlay-recording', f"{time}.mp4")
+    upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"{time}.mp4")
     driver.quit()
 
 
