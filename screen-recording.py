@@ -1,10 +1,10 @@
 import asyncio
 import os
 import subprocess
-import datetime
 import requests
 import json
 import boto3
+from datetime import datetime
 
 from time import sleep
 
