@@ -25,7 +25,6 @@ RUN apt-get update && \
     x11vnc \
     libfontconfig \
     libfreetype6 \
-    xfonts-cyrillic \
     xfonts-scalable \
     fonts-liberation \
     fonts-ipafont-gothic \
