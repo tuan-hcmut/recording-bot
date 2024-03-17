@@ -93,7 +93,7 @@ async def join_meet():
     driver.execute_cdp_cmd(
             "Browser.grantPermissions",
             {
-                "origin": "https://google.com",
+                "origin": "https://www.youtube.com/watch?v=9tR5b_qiZxM",
                 "permissions": [
                     "geolocation",
                     "audioCapture",
@@ -105,8 +105,8 @@ async def join_meet():
         )
 
 
-    driver.get(f'https://google.com')
-    sleep(5)
+    driver.get(f'https://www.youtube.com/watch?v=9tR5b_qiZxM')
+    sleep(10)
     driver.save_screenshot("screenshots/initial1.png")
     upload_to_s3('screenshots/initial1.png', 'qlay-recording', f"{datetime.utcnow()}.png")
 
@@ -121,6 +121,7 @@ async def join_meet():
     )
 
     print("Done recording")
+    driver.quit()
     upload_to_s3('recordings/output.mp4', 'qlay-recording', f"{datetime.utcnow()}.mp4")
 
 
