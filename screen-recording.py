@@ -122,10 +122,10 @@ async def join_meet():
     driver.find_element(By.ID, 'input-for-pwd').send_keys("617108")
     driver.find_element(By.ID, 'input-for-name').send_keys("Qlay-bot")
     driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(15)
     driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
     driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div[2]/div/button').click()
-    driver.save_screenshot("screenshots/c.png")
+    driver.save_screenshot("screenshots/joined.png")
     upload_to_s3('screenshots/joined.png', 'qlay-recording', f"{time}.png")
 
     print("Start recording")
