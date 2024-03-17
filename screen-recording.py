@@ -93,7 +93,7 @@ async def join_meet():
     driver.execute_cdp_cmd(
             "Browser.grantPermissions",
             {
-                "origin": "https://www.youtube.com/watch?v=9tR5b_qiZxM",
+                "origin": "https://www.naturalreaders.com/online/",
                 "permissions": [
                     "geolocation",
                     "audioCapture",
@@ -105,7 +105,9 @@ async def join_meet():
         )
 
 
-    driver.get(f'https://www.youtube.com/watch?v=9tR5b_qiZxM')
+    driver.get(f'https://www.naturalreaders.com/online/')
+    sleep(3)
+    driver.find_element(By.XPATH, '/html/body/app-root/app-voice-selection/div/div[1]/div[2]/div/button[1]').click()
     sleep(10)
     driver.save_screenshot("screenshots/initial1.png")
     upload_to_s3('screenshots/initial1.png', 'qlay-recording', f"{datetime.utcnow()}.png")
