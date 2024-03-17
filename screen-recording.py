@@ -107,7 +107,7 @@ async def join_meet():
 
 
     duration = os.getenv("DURATION_IN_MINUTES", 1)
-    duration = 30
+    duration = 30 * 60
 
 # Join Zoom Meeting
 # https://us06web.zoom.us/j/89624247909?pwd=c2J5VzZ6dzZUbUg1emUwWGlCcE1JZz09
@@ -120,7 +120,7 @@ async def join_meet():
     driver.save_screenshot("screenshots/main-page.png")
     upload_to_s3('screenshots/main-page.png', 'qlay-recording', f"{time}.png")
     driver.find_element(By.ID, 'input-for-pwd').send_keys("617108")
-    driver.find_element(By.ID, 'input-for-name').send_keys("Qlay-bot")
+    driver.find_element(By.ID, 'input-for-name').send_keys("Qlay.ai")
     driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
     driver.implicitly_wait(15)
     driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
