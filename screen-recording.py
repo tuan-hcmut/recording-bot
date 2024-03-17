@@ -4,6 +4,7 @@ import subprocess
 import datetime
 import requests
 import json
+import boto3
 
 from time import sleep
 
@@ -12,6 +13,10 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+def upload_to_s3(local_file_path, s3_bucket_name, object_name=None):
+    s3 = boto3.client('s3', aws_access_key_id="AKIA3Z4NVYHGH6MYOUPV", aws_secret_access_key="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",
+                       region_name="us-east-1")
+    
 async def run_command_async(command):
     process = await asyncio.create_subprocess_shell(
         command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -95,6 +100,7 @@ async def join_meet():
     driver.get(f'https://google.com')
     sleep(5)
     driver.save_screenshot("screenshots/initial1.png")
+    upload_to_s3('screenshots/initial1.png', 'qlay-recording', f"{datetime.utcnow()}.png")
 
     duration = os.getenv("DURATION_IN_MINUTES", 1)
     duration = int(duration) * 60
@@ -107,6 +113,7 @@ async def join_meet():
     )
 
     print("Done recording")
+    upload_to_s3('recordings/output.mp4', 'qlay-recording', f"{datetime.utcnow()}.mp4")
 
 
 if __name__ == "__main__":
