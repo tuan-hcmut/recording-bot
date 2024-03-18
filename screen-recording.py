@@ -131,28 +131,58 @@ async def join_meet():
             joined = True
         except:
             joined_time -= 1
+            print("waiting for join button. Try again in 10 seconds")
             driver.implicitly_wait(10) #Wait untils tabs loaded
             driver.save_screenshot("screenshots/not-joined.png")
             upload_to_s3('screenshots/not-joined.png', 'qlay-recording', f"not-join-{time}.png")
-            print("waiting for join button. Try again in 10 seconds")
 
 
     if joined:
         # duration = os.getenv("DURATION_IN_MINUTES", 1)
         # duration = 30 * 60
-        recording_time = 6
-        print("Start recording")
+        print("Start recording in 1 minutes")
         driver.save_screenshot("screenshots/meeting-update.png")
         upload_to_s3('screenshots/meeting-update.png', 'qlay-recording', f"meeting-update-{time}.png")
-        while recording_time > 0:
-            record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {5 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+
+        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {1 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
             
-            await asyncio.gather(
-                run_command_async(record_command),
-            )
-            upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-{time}.mp4")
-            recording_time -= 1
-        print("Done recording")
+        await asyncio.gather(
+            run_command_async(record_command),
+        )
+        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-audio-1-minute-{time}.mp4")
+
+        print("Done recording in 1 minutes")
+
+
+
+        print("Start recording in 2 minutes")
+        driver.save_screenshot("screenshots/meeting-update.png")
+        upload_to_s3('screenshots/meeting-update.png', 'qlay-recording', f"meeting-update-{time}.png")
+
+        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {2 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+            
+        await asyncio.gather(
+            run_command_async(record_command),
+        )
+        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-audio-2-minutes-{time}.mp4")
+
+        print("Done recording in 2 minutes")
+
+        print("Start recording in 5 minutes")
+        driver.save_screenshot("screenshots/meeting-update.png")
+        upload_to_s3('screenshots/meeting-update.png', 'qlay-recording', f"meeting-update-{time}.png")
+
+        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {5 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+            
+        await asyncio.gather(
+            run_command_async(record_command),
+        )
+        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-audio-5-minutes-{time}.mp4")
+
+        print("Done recording in 5 minutes")
+
+        
+
 
     driver.quit()
 
