@@ -132,7 +132,8 @@ async def join_meet():
         except:
             joined_time -= 1
             print("waiting for join button. Try again in 10 seconds")
-            driver.implicitly_wait(10) #Wait untils tabs loaded
+            # driver.implicitly_wait(10) #Wait untils tabs loaded
+            sleep(10)
             driver.save_screenshot("screenshots/not-joined.png")
             upload_to_s3('screenshots/not-joined.png', 'qlay-recording', f"not-join-{time}.png")
 
@@ -180,6 +181,19 @@ async def join_meet():
         upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-audio-5-minutes-{time}.mp4")
 
         print("Done recording in 5 minutes")
+
+        print("Start recording in 20 minutes")
+        driver.save_screenshot("screenshots/meeting-update.png")
+        upload_to_s3('screenshots/meeting-update.png', 'qlay-recording', f"meeting-update-{time}.png")
+
+        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {20 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+            
+        await asyncio.gather(
+            run_command_async(record_command),
+        )
+        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-audio-20-minutes-{time}.mp4")
+
+        print("Done recording in 20 minutes")
 
         
 
