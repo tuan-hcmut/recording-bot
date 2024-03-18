@@ -105,10 +105,6 @@ async def join_meet():
             },
         )
 
-
-    duration = os.getenv("DURATION_IN_MINUTES", 1)
-    duration = 30 * 60
-
 # Join Zoom Meeting
 # https://us06web.zoom.us/j/89624247909?pwd=c2J5VzZ6dzZUbUg1emUwWGlCcE1JZz09
 
@@ -142,14 +138,21 @@ async def join_meet():
 
 
     if joined:
+        # duration = os.getenv("DURATION_IN_MINUTES", 1)
+        # duration = 30 * 60
+        recording_time = 6
         print("Start recording")
-        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
-        
-        await asyncio.gather(
-            run_command_async(record_command),
-        )
+        driver.save_screenshot("screenshots/meeting-update.png")
+        upload_to_s3('screenshots/meeting-update.png', 'qlay-recording', f"meeting-update-{time}.png")
+        while recording_time > 0:
+            record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {5 * 60} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+            
+            await asyncio.gather(
+                run_command_async(record_command),
+            )
+            upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-{time}.mp4")
+            recording_time -= 1
         print("Done recording")
-        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-{time}.mp4")
 
     driver.quit()
 
