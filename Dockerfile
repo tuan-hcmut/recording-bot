@@ -101,6 +101,10 @@ COPY . .
 
 RUN touch /root/.Xauthority
 RUN chmod 600 /root/.Xauthority
+RUN chmod +x entrypoint.sh
 
 RUN rm /run/dbus/pid
 RUN mv pulseaudio.conf /etc/dbus-1/system.d/pulseaudio.conf
+
+# Run the application
+CMD [ "./entrypoint.sh" ]
