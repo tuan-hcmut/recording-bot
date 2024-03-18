@@ -114,28 +114,43 @@ async def join_meet():
 
 # Meeting ID:  896 2424 7909
 # Passcode: 617108
+    joined_time = 30
+    joined = False
     
     driver.get(f'https://zoom.us/wc/join/89624247909')
     driver.implicitly_wait(5) #Wait untils tabs loaded
-    driver.save_screenshot("screenshots/main-page.png")
-    upload_to_s3('screenshots/main-page.png', 'qlay-recording', f"{time}.png")
+    driver.save_screenshot("screenshots/lobby.png")
+    upload_to_s3('screenshots/lobby.png', 'qlay-recording', f"lobby-{time}.png")
     driver.find_element(By.ID, 'input-for-pwd').send_keys("617108")
     driver.find_element(By.ID, 'input-for-name').send_keys("Qlay.ai")
     driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/button').click()
-    driver.implicitly_wait(25)
-    driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
-    driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div[2]/div/button').click()
-    driver.save_screenshot("screenshots/joined.png")
-    upload_to_s3('screenshots/joined.png', 'qlay-recording', f"{time}.png")
 
-    print("Start recording")
-    record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
-    
-    await asyncio.gather(
-        run_command_async(record_command),
-    )
-    print("Done recording")
-    upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"{time}.mp4")
+    while joined_time > 0 and not joined:
+        try:
+            driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/footer/div[1]/div[1]/div[1]/button').click()
+            driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div[2]/div/div[1]/div[1]/div[8]/div[2]/div/div[2]/div/button').click()
+            driver.save_screenshot("screenshots/joined.png")
+            upload_to_s3('screenshots/joined.png', 'qlay-recording', f"joined-{time}.png")
+            joined_time = 0
+            joined = True
+        except:
+            joined_time -= 1
+            driver.implicitly_wait(10) #Wait untils tabs loaded
+            driver.save_screenshot("screenshots/not-joined.png")
+            upload_to_s3('screenshots/not-joined.png', 'qlay-recording', f"not-join-{time}.png")
+            print("waiting for join button. Try again in 10 seconds")
+
+
+    if joined:
+        print("Start recording")
+        record_command = f"ffmpeg -y -video_size 1920x1080 -framerate 30 -f x11grab -i :99 -f pulse -i default -t {duration} -c:v libx264 -pix_fmt yuv420p -c:a aac -strict experimental recordings/zoom-audio.mp4"
+        
+        await asyncio.gather(
+            run_command_async(record_command),
+        )
+        print("Done recording")
+        upload_to_s3(f'recordings/zoom-audio.mp4', 'qlay-recording', f"zoom-{time}.mp4")
+
     driver.quit()
 
 
